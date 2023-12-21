@@ -27,7 +27,7 @@ namespace TestEfHistory.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PersonHistories",
+                name: "PersonHistory",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
@@ -50,7 +50,7 @@ namespace TestEfHistory.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PersonHistories");
+                name: "PersonHistory");
 
             migrationBuilder.DropTable(
                 name: "People");

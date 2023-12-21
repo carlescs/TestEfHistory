@@ -4,7 +4,6 @@
 }
 
 <form method="post">
-    <input type="hidden" asp-for="Id"/>
     <div class="form-group">
         <label class="form-label" asp-for="Name">Name</label>
         <input type="text" class="form-control" asp-for="Name"/>
@@ -13,3 +12,25 @@
         <button type="submit" class="btn btn-primary">@(Model.Id==null?"Add":"Modify")</button>
     </div>
 </form>
+
+@if (Model.PersonHistory.Any())
+{
+    <h3>History</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Modified On</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.PersonHistory)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.ModifiedOn</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
