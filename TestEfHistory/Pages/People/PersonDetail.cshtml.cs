@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using TestEfHistory.DataAccess.Model;
 using TestEfHistory.DataAccess.Model.People;
 
@@ -14,15 +15,20 @@ namespace TestEfHistory.Pages.People
         [Required, MaxLength(100), BindProperty]
         public string Name { get; set; } = null!;
 
-        public void OnGet()
+        public IEnumerable<PersonHistory> PersonHistory { get; set; } = [];
+
+        public async Task OnGet()
         {
             if (Id == null) return;
-            var person = context.People.Find(Id);
+            var person =await  context.People
+                .Include(t=>t.PersonHistory)
+                .FirstOrDefaultAsync(t=>t.Id==Id);
             if (person == null)
                 RedirectToPage("/People/Index");
             else
             {
                 Name=person.Name;
+                PersonHistory= person.PersonHistory.OrderByDescending(t=>t.ModifiedOn);
             }
         }
 
@@ -32,23 +38,19 @@ namespace TestEfHistory.Pages.People
                 return Page();
             if (Id == null)
             {
-                var person = new Person { Name = Name };
-                context.People.Add(person);
+                var addedEntry = context.People.Add(new Person { Name = Name });
                 await context.SaveChangesAsync();
-                return RedirectToPage("/People/Index");
+                return RedirectToPage("/People/PersonDetail", new { addedEntry.Entity.Id });
             }
             else
             {
                 var person = await context.People.FindAsync(Id);
                 if (person == null)
                     return RedirectToPage("/People/Index");
-                else
-                {
-                    person.Name = Name;
-                    await context.SaveChangesAsync();
-                    return RedirectToPage("/People/Index");
-                }
+                person.Name = Name;
+                await context.SaveChangesAsync();
             }
+            return RedirectToPage();
         }
     }
 }

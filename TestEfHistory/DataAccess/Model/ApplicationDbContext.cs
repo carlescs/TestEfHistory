@@ -11,7 +11,7 @@ namespace TestEfHistory.DataAccess.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Person>().HasMany(t => t.PersonHistories).WithOne(t => t.Person)
+            modelBuilder.Entity<Person>().HasMany(t => t.PersonHistory).WithOne(t => t.Person)
                 .HasForeignKey(t => t.Id);
             modelBuilder.Entity<PersonHistory>().HasKey(t => new {t.Id, t.ModifiedOn});
             base.OnModelCreating(modelBuilder);

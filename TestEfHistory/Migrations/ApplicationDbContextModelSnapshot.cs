@@ -54,13 +54,13 @@ namespace TestEfHistory.Migrations
 
                     b.HasKey("Id", "ModifiedOn");
 
-                    b.ToTable("PersonHistories");
+                    b.ToTable("PersonHistory");
                 });
 
             modelBuilder.Entity("TestEfHistory.DataAccess.Model.People.PersonHistory", b =>
                 {
                     b.HasOne("TestEfHistory.DataAccess.Model.People.Person", "Person")
-                        .WithMany("PersonHistories")
+                        .WithMany("PersonHistory")
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -70,7 +70,7 @@ namespace TestEfHistory.Migrations
 
             modelBuilder.Entity("TestEfHistory.DataAccess.Model.People.Person", b =>
                 {
-                    b.Navigation("PersonHistories");
+                    b.Navigation("PersonHistory");
                 });
 #pragma warning restore 612, 618
         }
