@@ -17,19 +17,17 @@ namespace TestEfHistory.Pages.People
 
         public IEnumerable<PersonHistory> PersonHistory { get; set; } = [];
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            if (Id == null) return;
+            if (Id == null) RedirectToPage("/People/Index");
             var person =await  context.People
                 .Include(t=>t.PersonHistory)
                 .FirstOrDefaultAsync(t=>t.Id==Id);
             if (person == null)
-                RedirectToPage("/People/Index");
-            else
-            {
-                Name=person.Name;
-                PersonHistory= person.PersonHistory.OrderByDescending(t=>t.ModifiedOn);
-            }
+                return RedirectToPage("/People/Index");
+            Name=person.Name;
+            PersonHistory= person.PersonHistory.OrderByDescending(t=>t.ModifiedOn);
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
